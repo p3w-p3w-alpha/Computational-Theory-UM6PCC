@@ -1,0 +1,35 @@
+{
+  "classification": {
+    "accuracy_mean": 0.99,
+    "accuracy_std": 0.012247448713915901,
+    "precision_mean": 0.9817805383022774,
+    "precision_std": 0.022352579008307717,
+    "recall_mean": 1.0,
+    "recall_std": 0.0,
+    "f1_score_mean": 0.9906775067750677,
+    "f1_score_std": 0.011438240760446985,
+    "roc_auc_mean": 1.0,
+    "roc_auc_std": 0.0
+  },
+  "generation_expert": {
+    "perplexity": 3.5355834168046645,
+    "kl_divergence": 0.8362266152645002,
+    "avg_generated_length": 20.0,
+    "n_generated": 50
+  },
+  "completion": {
+    "k1_top1_accuracy": 0.41,
+    "k1_top3_accuracy": 0.84,
+    "k1_total_samples": 100,
+    "k3_top1_accuracy": 0.56,
+    "k3_top3_accuracy": 0.84,
+    "k3_total_samples": 100,
+    "k5_top1_accuracy": 0.48,
+    "k5_top3_accuracy": 0.87,
+    "k5_total_samples": 100
+  },
+  "entropy": {
+    "expert_pfa_entropy": 2.158285083958534,
+    "novice_pfa_entropy": 3.4666195965288686
+  }
+}
