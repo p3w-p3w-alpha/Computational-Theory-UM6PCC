@@ -1,23 +1,26 @@
 # ECG Scanpath Pattern Recognition Using Probabilistic Finite Automata
 
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/p3w-p3w-alpha/Computational-Theory-UM6PCC)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-Academic-green.svg)](LICENSE)
+[![UM6P](https://img.shields.io/badge/UM6P-College%20of%20Computing-orange.svg)](https://um6p.ma)
 
 ## Project Overview
 
-This project applies Probabilistic Finite Automata (PFA) to analyze and classify eye-tracking scanpaths of medical professionals reading 12-lead electrocardiograms (ECGs). The framework supports:
+This project applies **Probabilistic Finite Automata (PFA)** to analyze and classify eye-tracking scanpaths of medical professionals reading 12-lead electrocardiograms (ECGs). The framework supports:
 
-1. **Classification**: Distinguishing expert from novice reading patterns (99% accuracy)
-2. **Generation**: Creating realistic synthetic expert scanpaths (3.54 perplexity)
-3. **Completion**: Predicting the continuation of partial scanpaths (84-87% Top-3)
+- **Classification**: Distinguishing expert from novice reading patterns (99% accuracy)
+- **Generation**: Creating realistic synthetic expert scanpaths (3.54 perplexity)
+- **Completion**: Predicting the continuation of partial scanpaths (84-87% Top-3)
 
 ## Authors
 
-- **Nassim Lazrek** (nassim.lazrek@um6p.ma) - Theoretical framework & proofs
-- **Omar Ait Said** (omar.aitsaid@um6p.ma) - Implementation & experiments
-- **Ilyass Skiriba** (ilyass.skiriba@um6p.ma) - Data generation & evaluation
+| Name | Email | Role |
+|------|-------|------|
+| Nassim Lazrek | nassim.lazrek@um6p.ma | Theoretical framework & proofs |
+| Omar Ait Said | omar.aitsaid@um6p.ma | Implementation & experiments |
+| Ilyass Skiriba | ilyass.skiriba@um6p.ma | Data generation & evaluation |
 
-Mohammed VI Polytechnic University (UM6P), College of Computing, Rabat, Morocco
-
+**Institution**: Mohammed VI Polytechnic University (UM6P), College of Computing, Rabat, Morocco  
 **Course**: Computational Theory - Fall 2025
 
 ## Key Results
@@ -34,38 +37,58 @@ Mohammed VI Polytechnic University (UM6P), College of Computing, Rabat, Morocco
 | Generation Perplexity | 3.54 |
 | Top-3 Completion Accuracy | 84-87% |
 
-## Project Structure
+## Repository Structure
 
 ```
-ecg_scanpath_project/
-├── README.md                 # This file
-├── paper/
-│   ├── paper_draft.tex       # LaTeX source
-│   └── paper_draft.pdf       # Compiled paper
-├── src/
-│   ├── pfa.py                # PFA implementation
-│   ├── data_generator.py     # Synthetic data generation
-│   ├── evaluation.py         # Evaluation metrics
-│   └── visualizations.py     # Figure generation
-├── data/
-│   └── synthetic_dataset.csv # Generated dataset (200 scanpaths)
-├── experiments/
-│   └── results.json          # Experimental results
-├── visualizations/
-│   ├── fig1_ecg_layout.png
+Computational-Theory-UM6PCC/
+│
+├── README.md                                    # This file
+├── Computational Theory Project Description.pdf # Project requirements
+│
+├── code/                                        # Python implementation
+│   ├── pfa.py                                   # Core PFA implementation
+│   ├── data_generator.py                        # Synthetic data generation
+│   ├── evaluation.py                            # Evaluation metrics
+│   └── visualizations.py                        # Figure generation
+│
+├── Dataset/
+│   └── synthetic_dataset.csv                    # Generated dataset (200 scanpaths)
+│
+├── Results/
+│   └── results.json                             # Experimental results
+│
+├── Figures/                                     # Generated visualizations
 │   ├── fig3_transition_heatmaps.png
 │   ├── fig4_confidence_distribution.png
 │   ├── fig5_scanpath_examples.png
 │   ├── fig6_completion_accuracy.png
 │   └── fig7_entropy_comparison.png
-└── docs/
-    └── api_documentation.md
+│
+├── HMM_Final_Paper/
+│   └── FINAL_PAPER_HMM.pdf                      # Final research paper
+│
+├── PFA_State_Digram/
+│   └── STATE_DIAGRAM_GITHUB.png                 # PFA state diagram visualization
+│
+└── Proposal_Document/
+    └── PROJECT_PROPOSAL.pdf                     # Initial project proposal
 ```
 
 ## Installation
 
+### Prerequisites
+
+- Python 3.8 or higher
+- pip package manager
+
+### Setup
+
 ```bash
-# Required packages
+# Clone the repository
+git clone https://github.com/p3w-p3w-alpha/Computational-Theory-UM6PCC.git
+cd Computational-Theory-UM6PCC
+
+# Install required packages
 pip install numpy pandas matplotlib seaborn scikit-learn
 ```
 
@@ -74,17 +97,25 @@ pip install numpy pandas matplotlib seaborn scikit-learn
 ### 1. Generate Dataset
 
 ```python
-from src.data_generator import generate_dataset
+import sys
+sys.path.append('code')
+from data_generator import generate_dataset
 
 # Generate 100 expert + 100 novice scanpaths
 df = generate_dataset(n_expert=100, n_novice=100, seed=42)
-df.to_csv('data/synthetic_dataset.csv', index=False)
+df.to_csv('Dataset/synthetic_dataset.csv', index=False)
 ```
 
 ### 2. Train and Classify
 
 ```python
-from src.pfa import ScanpathClassifier
+import sys
+sys.path.append('code')
+import pandas as pd
+from pfa import ScanpathClassifier
+
+# Load dataset
+df = pd.read_csv('Dataset/synthetic_dataset.csv')
 
 # Prepare data
 expert_scanpaths = [sp.split(',') for sp in df[df['expertise']=='expert']['scanpath']]
@@ -117,23 +148,41 @@ completed = classifier.pfa_expert.complete_viterbi(partial, num_steps=5)
 print(f"Completed: {completed}")
 ```
 
-## Key Results
+### 5. Run Full Evaluation
 
-| Metric | Value |
-|--------|-------|
-| Classification Accuracy | 99.0% ± 1.2% |
-| Precision | 98.2% ± 2.2% |
-| Recall | 100% ± 0.0% |
-| F1-Score | 99.1% ± 1.1% |
-| Expert PFA Entropy | 2.16 bits |
-| Novice PFA Entropy | 3.47 bits |
-| Top-3 Completion Accuracy | 84-87% |
+```python
+import sys
+sys.path.append('code')
+import pandas as pd
+from evaluation import run_full_evaluation, print_results
+
+df = pd.read_csv('Dataset/synthetic_dataset.csv')
+results = run_full_evaluation(df, seed=42)
+print_results(results)
+```
+
+### 6. Generate Figures
+
+```python
+import sys
+sys.path.append('code')
+import json
+import pandas as pd
+from visualizations import generate_all_figures
+
+df = pd.read_csv('Dataset/synthetic_dataset.csv')
+with open('Results/results.json', 'r') as f:
+    results = json.load(f)
+
+generate_all_figures(df, results, 'Figures/')
+```
 
 ## Theoretical Foundation
 
 ### Markov Property Justification
 
 ECG scanpaths satisfy the first-order Markov property:
+
 ```
 P(X_{t+1} | X_1, ..., X_t) = P(X_{t+1} | X_t)
 ```
@@ -146,9 +195,9 @@ This is justified by:
 ### PFA Definition
 
 A PFA is defined as (Q, Σ, T, π₀) where:
-- Q = Σ = {I, II, III, aVR, aVL, aVF, V1, V2, V3, V4, V5, V6}
-- T[i,j] = P(next state = j | current state = i)
-- π₀[i] = P(initial state = i)
+- **Q = Σ** = {I, II, III, aVR, aVL, aVF, V1, V2, V3, V4, V5, V6}
+- **T[i,j]** = P(next state = j | current state = i)
+- **π₀[i]** = P(initial state = i)
 
 ### Sequence Probability
 
@@ -156,36 +205,23 @@ A PFA is defined as (Q, Σ, T, π₀) where:
 P(S) = π₀(s₁) × ∏_{t=1}^{n-1} T[s_t, s_{t+1}]
 ```
 
-## Run Full Evaluation
+## File Descriptions
 
-```python
-from src.evaluation import run_full_evaluation, print_results
-import pandas as pd
+| File | Description |
+|------|-------------|
+| `code/pfa.py` | Core PFA implementation with classification, generation, and completion |
+| `code/data_generator.py` | Generates synthetic expert/novice scanpath data |
+| `code/evaluation.py` | Cross-validation, metrics calculation, and result analysis |
+| `code/visualizations.py` | Creates all figures (heatmaps, distributions, comparisons) |
+| `Dataset/synthetic_dataset.csv` | 200 synthetic scanpaths (100 expert + 100 novice) |
+| `Results/results.json` | Saved experimental results and metrics |
 
-df = pd.read_csv('data/synthetic_dataset.csv')
-results = run_full_evaluation(df, seed=42)
-print_results(results)
-```
-
-## Generate Figures
-
-```python
-from src.visualizations import generate_all_figures
-import json
-
-df = pd.read_csv('data/synthetic_dataset.csv')
-with open('experiments/results.json', 'r') as f:
-    results = json.load(f)
-
-generate_all_figures(df, results, 'visualizations/')
-```
-
-## Conference Submission
+## Conference Targets
 
 This work is prepared for submission to:
-- CHI 2026 Posters (Barcelona, Spain) - Deadline: January 22, 2026
-- HCII 2026 (Montreal, Canada) - Deadline: February 2026
-- ETRA 2026 (Marrakech, Morocco)
+- **CHI 2026** Posters (Barcelona, Spain) - Deadline: January 22, 2026
+- **HCII 2026** (Montreal, Canada) - Deadline: February 2026
+- **ETRA 2026** (Marrakech, Morocco)
 
 ## License
 
@@ -207,5 +243,7 @@ We acknowledge the use of LLMs for code debugging and manuscript preparation. Al
   organization={ACM}
 }
 ```
-# Computational-Theory-UM6PCC
-# Computational-Theory-UM6PCC
+
+## Contact
+
+For questions or collaboration inquiries, please contact any of the authors via their UM6P email addresses listed above.
